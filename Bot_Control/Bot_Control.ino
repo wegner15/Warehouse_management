@@ -44,11 +44,41 @@ void setMotorSpeed(int speedValue){
 }
 void loop() {
   // put your main code here, to run repeatedly:
-  for (int Speed=40;Speed<150;Speed+=10){
+  for (int Speed=60;Speed<150;Speed+=10){
   setMotorSpeed(Speed);
   forward();
-  delay(1000);
+  delay(100);
   }
+for (int Speed=60;Speed<150;Speed+=10){
+  setMotorSpeed(Speed);
+  right();
+  delay(100);
+  }
+
+for (int Speed=60;Speed<150;Speed+=10){
+  setMotorSpeed(Speed);
+  left();
+  delay(100);
+  }
+
+  for (int Speed=60;Speed<150;Speed+=10){
+  setMotorSpeed(Speed);
+  back();
+  delay(100);
+  }
+  
+  stopMotors();
+openGripper();
+delay(1000);
+closeGriper();
+delay(1000);
+moveUp();
+delay(1000);
+moveDown();
+delay(1000);
+turnLeft();
+delay(1000);
+turnRight();
 
 }
 
@@ -86,7 +116,10 @@ void forward() {
 
 void openGripper(){
   int Pos=450;
-  HCPCA9685.Servo(gripper, Pos);
+  for (int Pos1=0;Pos1<Pos;Pos1+=10){
+  HCPCA9685.Servo(gripper, Pos1);
+  delay(100);
+  }
   
   
 }
@@ -97,21 +130,31 @@ void closeGriper(){
 }
 void moveUp(){
   int Pos=450;
-  HCPCA9685.Servo(sholder, Pos);
+  for (int Pos1=0;Pos1<Pos;Pos1+=10){
+  HCPCA9685.Servo(sholder, Pos1);
+  }
   
   
 }
 void moveDown(){
   int Pos=0;
-  HCPCA9685.Servo(sholder, Pos);
+  for (int Pos1=450;Pos1>0;Pos1-=10){
+  HCPCA9685.Servo(sholder, Pos1);
+  }
   
 }
 
 void turnLeft(){
   int Pos=0;
-  HCPCA9685.Servo(base, Pos);
+  for (int Pos1=450;Pos1>0;Pos1-=10){
+  HCPCA9685.Servo(base, Pos1);
+  delay(100);
+  }
 }
 void turnRight(){
   int Pos=450;
-  HCPCA9685.Servo(sholder, Pos);
+  for (int Pos1=0;Pos1<Pos;Pos1+=10){
+  HCPCA9685.Servo(sholder, Pos1);
+  delay(100);
+  }
 }
