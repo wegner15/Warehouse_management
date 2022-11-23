@@ -34,16 +34,76 @@ void setup() {
 
   /* Wake the device up */
   HCPCA9685.Sleep(false);
-
+  Serial.begin(9600);
+//forward();
+delay(1000);
 
 }
-void setMotorSpeed(int speedValue){
-  analogWrite(speedPin1, speedValue);
-  analogWrite(speedPin2, speedValue-20);
+
+void followLine(){
+  // put your main code here, to run repeatedly:
+  int sensor1=digitalRead(D0);
+  int sensor2=map(analogRead(A0),0,1023,0,1);
+  if (sensor1==1&&sensor2==0){
+//    Move towards left
+
+
+delay(100);
+    stopMotors();
+    left();
+Serial.println("Left");
+
+  }
+  else if (sensor2==1&&sensor1==0){
+//    Move towards right
+right();
+Serial.println("Right");
+
+delay(100);
+    stopMotors();
+  }
+
+  else if (sensor1==0&&sensor2==0){
+    //Move straight
+    forward();
+    delay(100);
+    stopMotors();
+  }
+  Serial.println(sensor1);
+  
+  Serial.println(sensor2);
+  delay(100);
   
 }
+
+void setMotorSpeed(int speedValue){
+  
+  analogWrite(speedPin1, speedValue);
+  analogWrite(speedPin2, speedValue);
+  
+}
+int targetSpeed=70;
 void loop() {
-  // put your main code here, to run repeatedly:
+  if (targetSpeed<120){
+     setMotorSpeed(targetSpeed);
+     targetSpeed+=10;
+  }
+  
+ 
+  
+  forward();
+//  delay(600);
+//  right();
+//  delay(600);
+//  forward();
+  
+//  motionTest();
+
+ 
+
+}
+void motionTest(){
+   // put your main code here, to run repeatedly:
   for (int Speed=60;Speed<150;Speed+=10){
   setMotorSpeed(Speed);
   forward();
@@ -79,9 +139,7 @@ delay(1000);
 turnLeft();
 delay(1000);
 turnRight();
-
 }
-
 void stopMotors(){
   digitalWrite(motorL1, LOW);
   digitalWrite(motorL2, LOW);
@@ -101,14 +159,14 @@ void left() {
   digitalWrite(motorR2, LOW);
 }
 void back() {
-  digitalWrite(motorL1, LOW);
-  digitalWrite(motorL2, HIGH);
+  digitalWrite(motorL2, LOW);
+  digitalWrite(motorL1, HIGH);
   digitalWrite(motorR1, LOW);
   digitalWrite(motorR2, HIGH);
 }
 void forward() {
-  digitalWrite(motorL1, HIGH);
-  digitalWrite(motorL2, LOW);
+  digitalWrite(motorL2, HIGH);
+  digitalWrite(motorL1, LOW);
   digitalWrite(motorR1, HIGH);
   digitalWrite(motorR2, LOW);
 

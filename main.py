@@ -7,6 +7,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
 import numpy as np
 from Video_Processor import *
 from itertools import product
+from stream import *
 
 
 class VideoThread(QThread):
@@ -18,13 +19,18 @@ class VideoThread(QThread):
 
     def run(self):
         # capture from web cam
-        cap = cv2.VideoCapture(0)
+        URL = "http://192.168.217.35"
+        set_resolution(url=URL, index=10)
+        # set_quality(url=URL, value=62)
+        # set_awb(url=URL, awb=1)
+        cap = VideoCapture(URL + ":81/stream")
+        # cap = cv2.VideoCapture(0)
         # ret, frame = cap.read()
         while self._run_flag:
-            ret, cv_img = cap.read()
+            cv_img = cap.read()
             decoder(cv_img)
-            if ret:
-                self.change_pixmap_signal.emit(cv_img)
+            # if ret:
+            self.change_pixmap_signal.emit(cv_img)
         # shut down capture system
         cap.release()
 
