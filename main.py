@@ -10,6 +10,8 @@ from itertools import product
 from stream import *
 
 
+
+
 class VideoThread(QThread):
     change_pixmap_signal = pyqtSignal(np.ndarray)
 
@@ -53,10 +55,11 @@ class App(QWidget):
         self.textLabel = QLabel('Robot Movement')
         self.load_button = QPushButton(self, text="Load Product")
         self.fetch_button = QPushButton(self, text="Fetch Product")
+        self.fetch_button.pressed.connect(self.fetch_product)
         self.items_selection = QComboBox(self)
 
         # wordlist for testing
-        wordlist = [''.join(combo) for combo in product('abc', repeat=4)]
+        wordlist = ["Product A", "Product B", "Product C", "Product D", "Product E"]
         self.items_selection.addItems(wordlist)
         # completers only work for editable combo boxes. QComboBox.NoInsert prevents insertion of the search text
         self.items_selection.setEditable(True)
@@ -81,6 +84,13 @@ class App(QWidget):
         self.thread.change_pixmap_signal.connect(self.update_image)
         # start the thread
         self.thread.start()
+
+    def fetch_product(self):
+        target_product = self.items_selection.currentText()
+        if not target_product:
+            pass
+        target_products["target"] = target_product
+        print(target_products)
 
     def closeEvent(self, event):
         self.thread.stop()
